@@ -21,7 +21,7 @@ WORKDIR /app
 
 COPY .mvn/ .mvn
 COPY mvnw pom.xml ./
-RUN dos2unix mvnw && ./mvnw dependency:go-offline
+RUN ./mvnw dependency:go-offline
 COPY src ./src
 
 FROM base as test
