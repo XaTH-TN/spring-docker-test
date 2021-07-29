@@ -24,15 +24,15 @@ COPY mvnw pom.xml ./
 RUN chmod +x mvnw && dos2unix mvnw && ./mvnw dependency:go-offline
 COPY src ./src
 
-FROM base as test
-RUN ["./mvnw", "spring-javaformat:apply", "test"]
+#FROM base as test
+#RUN ["./mvnw", "spring-javaformat:apply", "test"]
 
 FROM base as development
 CMD ["./mvnw", "spring-javaformat:apply", "spring-boot:run", "-Dspring-boot.run.profiles=mysql", "-Dspring-boot.run.jvmArguments='-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:8000'"]
 
 FROM base as build
 RUN ./mvnw spring-javaformat:apply
-RUN ./mvnw package
+RUN ./mvnw package -Dmaven.test.skip=true
 
 FROM openjdk:11-jre-slim as production
 EXPOSE 8080
